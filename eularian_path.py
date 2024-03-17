@@ -1,28 +1,36 @@
 
 def eularian_path(graph):
+    traversed_nodes = []
+    res = []
     # we store the graph as in { 3: [2,4] , 1: [0]}
-    in_nodes = [0] * (len(graph) + 1)
-    out_nodes = [0] * (len(graph) + 1)
+    in_nodes = {}
+    out_nodes = {}
+
+    #initialize all nodes value to 0 first
+    for out_n,in_n in graph.items():
+        for in_node in in_n:
+            out_nodes[in_node] = 0
+            in_nodes[in_node] = 0
+        out_nodes[out_n] = 0
+        in_nodes[out_n] = 0
 
     for out_n,in_n in graph.items():
         out_nodes[out_n] += len(in_n)
         for in_node in in_n:
             in_nodes[in_node] += 1
-    
-    for i in range(0,len(in_nodes)):
-        start_node, end_node = 0,0
-        if (in_nodes[i] - out_nodes[i] > 1 or out_nodes[i] - in_nodes[i] > 1):
-            return Null
+
+    start_node, end_node = next(iter(in_nodes.items()))
+    for i in in_nodes.keys():
+        if (((in_nodes[i] - out_nodes[i]) > 1) or ((out_nodes[i] - in_nodes[i]) > 1)):
+            return 0
         elif (in_nodes[i] - out_nodes[i] == 1):
-            start_node = i
-        elif (out_nodes[i] - in_nodes[i] == 1):
             end_node = i
-    print(out_nodes)
-    print(in_nodes)
+        elif (out_nodes[i] - in_nodes[i] == 1):
+            start_node = i
+    print("start_node:", start_node)
 
     #now we have start and end node, we can traverse
     # we can use a stack to keep track, so lifo
-    traversed_nodes = []
     traversed_nodes.append(start_node)
     curr_node = start_node
     while(traversed_nodes): # while stack is not empty
@@ -33,9 +41,12 @@ def eularian_path(graph):
             traversed_nodes.append(next_node)
             curr_node = next_node
         else:
-            print(traversed_nodes.pop(), end=" ")
+            res.append(traversed_nodes.pop())
             if(len(traversed_nodes) > 0):
                 curr_node = traversed_nodes[-1]
+
+    while(len(res) > 0):
+        print(res.pop(), end= " ") 
             
 mapping_dict = {}
 with open("graph.txt", "r") as file:
