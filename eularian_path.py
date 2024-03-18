@@ -44,9 +44,7 @@ def eularian_path(graph):
             res.append(traversed_nodes.pop())
             if(len(traversed_nodes) > 0):
                 curr_node = traversed_nodes[-1]
-
-    while(len(res) > 0):
-        print(res.pop(), end= " ") 
+    return res
             
 mapping_dict = {}
 with open("graph.txt", "r") as file:
@@ -56,4 +54,6 @@ with open("graph.txt", "r") as file:
         key = int(key)
         values = list(map(int, values.split(',')))
         mapping_dict[key] = values
-eularian_path(mapping_dict)            
+res = eularian_path(mapping_dict)
+while(len(res) > 0):
+    print(res.pop(), end= " ")             
